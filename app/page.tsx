@@ -3,7 +3,39 @@ import Image from 'next/image'
 import DataTable from './components/DataTable'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
+import { fetcher } from '@/lib/coingecko.actions'
 import { TrendingUp, TrendingDown } from 'lucide-react'
+
+type CurrencyValue = { usd: number }
+
+interface TrendingCoin {
+	item: {
+		id: string
+		name: string
+		symbol: string
+		market_cap_rank?: number
+		thumb?: string
+		large: string
+		data: {
+			price: number
+			price_change_percentage_24h: CurrencyValue
+		}
+	}
+}
+
+interface DataTableColumn<T> {
+	header: string
+	cellClassName?: string
+	cell: (row: T) => React.ReactNode | string
+}
+
+interface CoinDetailsData {
+	id: string
+	name: string
+	symbol: string
+	image: { large: string }
+	market_data: { current_price: { usd: number } }
+}
 
 const trendingCoinsData: TrendingCoin[] = [
 	{
@@ -97,13 +129,15 @@ const columns: DataTableColumn<TrendingCoin>[] = [
 
 			return (
 				<Link href={`/coin/${item.id}`}>
-					<Image
-						src={item.large}
-						alt={item.name}
-						width={24}
-						height={24}
-					/>
-					<p>{item.name}</p>
+					<div className="flex items-center gap-2">
+						<Image
+							src={item.large}
+							alt={item.name}
+							width={24}
+							height={24}
+						/>
+						<p>{item.name}</p>
+					</div>
 				</Link>
 			)
 		},
@@ -139,21 +173,25 @@ const columns: DataTableColumn<TrendingCoin>[] = [
 	},
 ]
 
-const page = () => {
+export default async function Page() {
+  const coin = await fetcher<CoinDetailsData>('coins/bitcoin', {
+    dex_pair_format: 'symbol'
+  });
+
 	return (
 		<main className='main-container'>
 			<section className='home-grid'>
 				<div id='coin-overview'>
 					<div className='header pt-2'>
 						<Image
-							src='https://assets.coingecko.com/coins/images/1/large/bitcoin.png'
-							alt='Bitcoin'
+							src={coin.image.large}
+							alt={coin.name}
 							width={56}
 							height={56}
 						/>
 						<div className='info'>
-							<p>BitCoin / BTC</p>
-							<h1>$89,113.00</h1>
+							<p>{coin.name} / {coin.symbol.toUpperCase()}</p>
+							<h1>${coin.market_data.current_price.usd.toFixed(2)}</h1>
 						</div>
 					</div>
 				</div>
@@ -173,5 +211,4 @@ const page = () => {
 	)
 }
 
-export default page
 
