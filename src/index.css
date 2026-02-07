@@ -221,7 +221,7 @@ section {
     }
 
     .arrow-wrapper {
-      @apply group-hover:bg-white-50 size-10 rounded-full absolute right-10 top-1/2 
+       @apply group-hover:bg-white-50 size-10 rounded-full absolute right-10 top-1/2 
         -translate-y-1/2 flex justify-center items-center overflow-hidden;
 
       img {

@@ -32,8 +32,6 @@ const HeroLights = () => {
    position={[1, 3, 4]}
    intensity={15}
    rotation={[-Math.PI / 4, Math.PI / 4, 0]}
-   width={2}
-   height={2}
    />
 
    <pointLight 
