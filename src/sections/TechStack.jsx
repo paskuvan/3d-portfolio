@@ -36,7 +36,7 @@ const TechStack = () => {
         <div className='w-full h-full md:px-10 px-5'>
             <TitleHeader 
             title="My Preferred Tech Stack"
-            sub="What I Bring to The Table"
+            sub="🤖 What I Bring to The Table"
             />
 
         <div className='tech-grid'>
